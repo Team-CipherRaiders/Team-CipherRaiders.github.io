@@ -1,21 +1,17 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>SMS Access</title>
-  </head>
-  <body>
-    <button id="request-access">Request SMS Access</button>
-    <script>
-      const requestAccessButton = document.getElementById('request-access');
-      requestAccessButton.addEventListener('click', async () => {
-        try {
-          const sms = await navigator.sms.requestAccess();
-          console.log('SMS access granted!');
-          // We'll handle the messages here
-        } catch (error) {
-          console.error('Error requesting SMS access:', error);
-        }
-      });
-    </script>
-  </body>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ارسال IP به تلگرام و ایمیل</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ارسال آدرس IP</h1>
+        <button id="getIpButton">دریافت آدرس IP</button>
+        <p id="ipDisplay"></p>
+    </div>
+    <script src="script.js"></script>
+</body>
 </html>
